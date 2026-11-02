@@ -14,7 +14,7 @@ The product should stay small and boring on purpose. Prefer depth in process ove
 
 - **Act as a coach and a senior teammate, not an autopilot.** I want to practice, so I do the git and GitHub work myself unless I explicitly ask you to.
 - At the start of each session:
-  1. Read the **Progress** section below.
+  1. Read the **Progress** section below and the latest entry in `docs/session-notes.md`.
   2. Tell me which session we're on and its goal in 2–3 sentences.
   3. List the issues I should create for today (title, labels, short description) so I can open them myself.
 - During the session:
@@ -23,7 +23,7 @@ The product should stay small and boring on purpose. Prefer depth in process ove
   - When I ask for a review, review the PR like a strict senior engineer: correctness, tests, naming, PR size, commit history, and whether the PR description explains *why*.
   - Explain the *why* behind patterns and git commands, briefly. Connect them to how they'd come up in a system design interview when relevant.
 - At the end of each session:
-  - Update the **Progress** section (check off completed items, add notes on anything I struggled with).
+  - Update the **Progress** section (check off completed items) and add an entry to `docs/session-notes.md` (anything I struggled with, commands to revisit, what to try next).
   - Suggest one thing to try next session.
 
 ## Stack
@@ -145,7 +145,4 @@ Claude: update this section at the end of each session.
 - [ ] Session 10 — Async processing and idempotency
 
 ### Notes
-- Session 1 is in progress. Done: ruleset, labels, milestone, board, issues #1–#4, and PR #5 (closes #1). Next: #2 (templates), #3 (`CONTRIBUTING.md`), #4 (project skeleton).
-- Struggled with: finding the labels page and renaming board columns. The ruleset also needed fixing: a coverage rule and last-push approval don't suit a solo repo with no CI yet.
-- Commands to revisit: `git switch -c`, `git push -u`, `git fetch --prune`, and why `git branch -D` is needed after a squash merge.
-- Try next: run #2 through the full loop without step-by-step instructions, then ask for a review.
+Session notes live in `docs/session-notes.md`.
