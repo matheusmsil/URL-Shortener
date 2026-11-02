@@ -1,0 +1,28 @@
+name: Feature request
+description: Suggest a new feature or improvement
+labels: ["feature"]
+body:
+  - type: textarea
+    id: why
+    attributes:
+      label: Why
+      description: Mention the impact of the change and why it is needed.
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: What
+      description: Mention the change you are requesting and any relevant context.
+    validations:
+      required: true
+  - type: textarea
+    id: done-when
+    attributes:
+      label: Done when
+      description: Describe the criteria for when this feature request can be considered complete.
+      placeholder: |
+        - [ ] ...
+        - [ ] ...
+    validations:
+      required: true
