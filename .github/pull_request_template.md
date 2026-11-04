@@ -1,10 +1,10 @@
 ## What
-<!-- What changed? -->
+<!-- What changed in the code? Include anything the diff doesn't show, like settings changes. -->
 
 ## Why
-<!-- Why is this change needed? -->
+<!-- The problem is in the linked issue. Explain decisions and trade-offs here. -->
 
 ## How it was tested
-<!-- How did you verify that it works? -->
+<!-- Evidence that the issue's "Done when" items are met: commands, results, links to CI runs. -->
 
 Closes #
