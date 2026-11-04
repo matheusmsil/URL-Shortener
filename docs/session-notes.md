@@ -2,6 +2,20 @@
 
 Newest entry first. Each entry covers where the session ended, what I struggled with, commands to revisit, and what to try next.
 
+## 2026-11-04 — Session 2 (in progress)
+
+- **Status:** Done: #19 ruff and mypy (PR #23), #20 CI workflow (PR #24), #25 PR title and checklist checks (PR #26), #27 clearer PR template comments (PR #29). Next: #21 (cache dependencies, baseline is 13–18 s per run without cache) and #22 (require CI on `main`, including `pr-title` and `checklists`).
+- **Still open from today:**
+  - The squash merge setting is still `COMMIT_OR_PR_TITLE`, so single-commit PRs put the commit title on `main` and skip the title check. Change it to the PR title.
+  - The title test from #25 never ran: give a PR an invalid title, watch `pr-title` fail, then fix it.
+- **Struggled with:**
+  - Merging before the work was finished: #24 without a review and with a non-conventional title (`Add ci workflow` is now on `main`), #26 with two "Done when" boxes checked but not done, #29 with the description copied unchanged from #28.
+  - Committing new work on the branch of an already merged PR (#28). Fixed with a new branch from `main` and `git cherry-pick`.
+  - Pushing after an amend: the branch diverges, so it needs `git push --force-with-lease`.
+- **Commands to revisit:** `git cherry-pick`, `git revert`, `gh run rerun --failed`, `gh pr checks --watch`, `gh pr close --delete-branch`.
+- **Ideas:** a third issue form for `chore`/`ci` tasks, since neither existing form fits them.
+- **Try next:** before each merge, reread the issue's "Done when" and open each link in "How it was tested". Only check a box after doing the work.
+
 ## 2026-11-04 — Session 1 (done)
 
 - **Status:** Done: #4 (PR #16), the project skeleton with uv, FastAPI, `GET /health` and one test. This completes Session 1. Still to confirm: both issue forms appear when opening a new issue, the check left from #2.
