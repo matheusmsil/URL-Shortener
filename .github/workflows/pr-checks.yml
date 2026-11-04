@@ -1,0 +1,59 @@
+name: PR checks
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened]
+
+permissions:
+  contents: read
+  pull-requests: read
+  issues: read
+
+jobs:
+  # The PR title becomes the squash commit on main, so it must follow Conventional Commits.
+  pr-title:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check PR title
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          title=$(gh pr view "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --json title --jq .title)
+          pattern='^(feat|fix|refactor|test|docs|chore|ci|revert)(\([a-z0-9-]+\))?!?: .+'
+          if [[ ! "$title" =~ $pattern ]]; then
+            echo "::error::PR title \"$title\" must follow Conventional Commits, e.g. \"feat: add link expiry\"."
+            exit 1
+          fi
+          echo "PR title is valid: $title"
+
+  # Every checklist item in the PR description and in the issues it closes must be checked.
+  checklists:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check checklists
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          unchecked() { grep -E '^[[:space:]]*[-*+] \[ \]' || true; }
+          failed=0
+
+          items=$(gh pr view "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --json body --jq .body | unchecked)
+          if [[ -n "$items" ]]; then
+            echo "::error::PR #$PR_NUMBER has unchecked items:"
+            echo "$items"
+            failed=1
+          fi
+
+          issues=$(gh pr view "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --json closingIssuesReferences --jq '.closingIssuesReferences[].number')
+          for issue in $issues; do
+            items=$(gh issue view "$issue" --repo "$GITHUB_REPOSITORY" --json body --jq .body | unchecked)
+            if [[ -n "$items" ]]; then
+              echo "::error::Issue #$issue has unchecked items:"
+              echo "$items"
+              failed=1
+            fi
+          done
+
+          exit $failed
