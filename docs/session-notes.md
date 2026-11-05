@@ -2,6 +2,20 @@
 
 Newest entry first. Each entry covers where the session ended, what I struggled with, commands to revisit, and what to try next.
 
+## 2026-11-05 — Session 2 (done)
+
+- **Status:** Done: #21 dependency cache (PR #32) and #22 required checks on `main` (PR #33). This completes Session 2. Both items left open on 2026-11-04 are resolved: squash commits now use the PR title and description, and the title test ran on PR #32.
+- **Results worth remembering:**
+  - The cache works but didn't make CI faster: restoring it takes ~2 s, about what the install saves, and runs stayed at ~16 s. It should pay off once dependencies grow.
+  - `main` now requires `checks`, `pr-title` and `checklists`, and branches must be up to date. PR #33 was blocked by `checklists` until #22's boxes were checked.
+- **Struggled with:**
+  - PR #32 was merged with its original description, so commit `4422acc` on `main` says the cache makes CI "a few seconds faster" and has no run times, while the box saying it did was checked. Since descriptions now become the commit body, these mistakes are permanent.
+  - Running `git revert HEAD` twice reverted the revert. Caught before pushing and fixed with `git reset --hard HEAD~1`.
+  - PRs #32 and #33 were merged without the review I had planned.
+- **Went well:** PR #33 had the best description so far: the What covered the ruleset change that isn't in the diff, the Why explained the trade-off, and How it was tested linked the failing run.
+- **Commands to revisit:** `git reset --hard HEAD~1`, `git revert` (and why running it twice undoes itself), `gh pr edit --title`, `gh run rerun --failed`.
+- **Try next:** in Session 3, write each PR description like #33 before asking for a review, and wait for the review before merging.
+
 ## 2026-11-04 — Session 2 (in progress)
 
 - **Status:** Done: #19 ruff and mypy (PR #23), #20 CI workflow (PR #24), #25 PR title and checklist checks (PR #26), #27 clearer PR template comments (PR #29). Next: #21 (cache dependencies, baseline is 13–18 s per run without cache) and #22 (require CI on `main`, including `pr-title` and `checklists`).

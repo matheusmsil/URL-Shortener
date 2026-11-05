@@ -134,7 +134,7 @@ Each session is roughly half a day. Do them in order; repeat any that felt shaky
 Claude: update this section at the end of each session.
 
 - [x] Session 1 — Repo setup
-- [ ] Session 2 — CI basics
+- [x] Session 2 — CI basics
 - [ ] Session 3 — Core features with the full loop
 - [ ] Session 4 — Releases and tags
 - [ ] Session 5 — Postgres and the repository pattern
