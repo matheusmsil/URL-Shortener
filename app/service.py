@@ -20,6 +20,10 @@ class CodeGenerationError(Exception):
     pass
 
 
+class LinkNotFoundError(Exception):
+    pass
+
+
 def generate_code() -> str:
     return "".join(secrets.choice(ALPHABET) for _ in range(CODE_LENGTH))
 
@@ -43,3 +47,9 @@ class LinkService:
                 continue
             return Link(code=code, url=url)
         raise CodeGenerationError(f"No free code after {MAX_ATTEMPTS} attempts")
+
+    def get_url(self, code: str) -> str:
+        url = self._repository.get_url(code)
+        if url is None:
+            raise LinkNotFoundError(code)
+        return url
