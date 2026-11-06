@@ -21,6 +21,12 @@ class LinkResponse(BaseModel):
     url: str
 
 
+class StatsResponse(BaseModel):
+    code: str
+    url: str
+    clicks: int
+
+
 def get_service(db: Annotated[sqlite3.Connection, Depends(get_db)]) -> LinkService:
     return LinkService(LinkRepository(db))
 
@@ -34,6 +40,18 @@ def create_link(
     return LinkResponse(code=link.code, url=link.url)
 
 
+@router.get("/links/{code}/stats")
+def get_stats(
+    code: str,
+    service: Annotated[LinkService, Depends(get_service)],
+) -> StatsResponse:
+    try:
+        stats = service.get_stats(code)
+    except LinkNotFoundError as error:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "Link not found") from error
+    return StatsResponse(code=stats.code, url=stats.url, clicks=stats.clicks)
+
+
 # 302, not 301: browsers cache a 301 and stop calling the server, so clicks
 # could no longer be counted.
 @router.get("/{code}")
@@ -42,7 +60,7 @@ def redirect(
     service: Annotated[LinkService, Depends(get_service)],
 ) -> RedirectResponse:
     try:
-        url = service.get_url(code)
+        url = service.resolve(code)
     except LinkNotFoundError as error:
         raise HTTPException(status.HTTP_404_NOT_FOUND, "Link not found") from error
     return RedirectResponse(url, status_code=status.HTTP_302_FOUND)

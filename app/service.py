@@ -16,6 +16,13 @@ class Link:
     url: str
 
 
+@dataclass(frozen=True)
+class LinkStats:
+    code: str
+    url: str
+    clicks: int
+
+
 class CodeGenerationError(Exception):
     pass
 
@@ -48,8 +55,16 @@ class LinkService:
             return Link(code=code, url=url)
         raise CodeGenerationError(f"No free code after {MAX_ATTEMPTS} attempts")
 
-    def get_url(self, code: str) -> str:
-        url = self._repository.get_url(code)
+    def resolve(self, code: str) -> str:
+        """Return the URL for a code and count the visit as a click."""
+        url = self._repository.record_click(code)
         if url is None:
             raise LinkNotFoundError(code)
         return url
+
+    def get_stats(self, code: str) -> LinkStats:
+        stats = self._repository.get_stats(code)
+        if stats is None:
+            raise LinkNotFoundError(code)
+        url, clicks = stats
+        return LinkStats(code=code, url=url, clicks=clicks)

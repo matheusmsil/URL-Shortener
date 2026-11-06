@@ -18,8 +18,17 @@ class LinkRepository:
         except sqlite3.IntegrityError as error:
             raise CodeAlreadyExistsError(code) from error
 
-    def get_url(self, code: str) -> str | None:
-        row = self._db.execute(
-            "SELECT url FROM links WHERE code = ?", (code,)
-        ).fetchone()
+    def record_click(self, code: str) -> str | None:
+        # Incrementing in SQL keeps concurrent clicks from overwriting each other.
+        with self._db:
+            row = self._db.execute(
+                "UPDATE links SET clicks = clicks + 1 WHERE code = ? RETURNING url",
+                (code,),
+            ).fetchone()
         return None if row is None else str(row[0])
+
+    def get_stats(self, code: str) -> tuple[str, int] | None:
+        row = self._db.execute(
+            "SELECT url, clicks FROM links WHERE code = ?", (code,)
+        ).fetchone()
+        return None if row is None else (str(row[0]), int(row[1]))

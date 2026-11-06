@@ -20,12 +20,24 @@ def test_add_rejects_duplicate_code(db: sqlite3.Connection) -> None:
         repository.add("abc1234", "https://other.example.com")
 
 
-def test_get_url_returns_stored_url(db: sqlite3.Connection) -> None:
+def test_record_click_returns_url_and_counts_click(db: sqlite3.Connection) -> None:
     repository = LinkRepository(db)
     repository.add("abc1234", "https://example.com")
 
-    assert repository.get_url("abc1234") == "https://example.com"
+    assert repository.record_click("abc1234") == "https://example.com"
+    assert repository.get_stats("abc1234") == ("https://example.com", 1)
 
 
-def test_get_url_returns_none_for_unknown_code(db: sqlite3.Connection) -> None:
-    assert LinkRepository(db).get_url("missing") is None
+def test_record_click_returns_none_for_unknown_code(db: sqlite3.Connection) -> None:
+    assert LinkRepository(db).record_click("missing") is None
+
+
+def test_get_stats_starts_at_zero_clicks(db: sqlite3.Connection) -> None:
+    repository = LinkRepository(db)
+    repository.add("abc1234", "https://example.com")
+
+    assert repository.get_stats("abc1234") == ("https://example.com", 0)
+
+
+def test_get_stats_returns_none_for_unknown_code(db: sqlite3.Connection) -> None:
+    assert LinkRepository(db).get_stats("missing") is None
