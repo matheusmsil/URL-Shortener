@@ -18,3 +18,14 @@ def test_add_rejects_duplicate_code(db: sqlite3.Connection) -> None:
 
     with pytest.raises(CodeAlreadyExistsError):
         repository.add("abc1234", "https://other.example.com")
+
+
+def test_get_url_returns_stored_url(db: sqlite3.Connection) -> None:
+    repository = LinkRepository(db)
+    repository.add("abc1234", "https://example.com")
+
+    assert repository.get_url("abc1234") == "https://example.com"
+
+
+def test_get_url_returns_none_for_unknown_code(db: sqlite3.Connection) -> None:
+    assert LinkRepository(db).get_url("missing") is None
