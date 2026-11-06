@@ -135,7 +135,7 @@ Claude: update this section at the end of each session.
 
 - [x] Session 1 — Repo setup
 - [x] Session 2 — CI basics
-- [ ] Session 3 — Core features with the full loop
+- [x] Session 3 — Core features with the full loop
 - [ ] Session 4 — Releases and tags
 - [ ] Session 5 — Postgres and the repository pattern
 - [ ] Session 6 — Git hard scenarios, part 1
