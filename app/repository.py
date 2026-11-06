@@ -17,3 +17,9 @@ class LinkRepository:
                 )
         except sqlite3.IntegrityError as error:
             raise CodeAlreadyExistsError(code) from error
+
+    def get_url(self, code: str) -> str | None:
+        row = self._db.execute(
+            "SELECT url FROM links WHERE code = ?", (code,)
+        ).fetchone()
+        return None if row is None else str(row[0])

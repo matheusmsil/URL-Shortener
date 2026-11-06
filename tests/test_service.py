@@ -4,7 +4,12 @@ import sqlite3
 import pytest
 
 from app.repository import LinkRepository
-from app.service import CodeGenerationError, LinkService, generate_code
+from app.service import (
+    CodeGenerationError,
+    LinkNotFoundError,
+    LinkService,
+    generate_code,
+)
 
 
 def test_generate_code_returns_seven_base62_characters() -> None:
@@ -39,3 +44,15 @@ def test_create_link_gives_up_when_every_code_is_taken(
 
     with pytest.raises(CodeGenerationError):
         service.create_link("https://example.com")
+
+
+def test_get_url_returns_url_for_known_code(db: sqlite3.Connection) -> None:
+    service = LinkService(LinkRepository(db))
+    link = service.create_link("https://example.com")
+
+    assert service.get_url(link.code) == "https://example.com"
+
+
+def test_get_url_raises_for_unknown_code(db: sqlite3.Connection) -> None:
+    with pytest.raises(LinkNotFoundError):
+        LinkService(LinkRepository(db)).get_url("missing")
