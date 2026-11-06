@@ -43,3 +43,27 @@ def test_redirect_returns_404_for_unknown_code(client: TestClient) -> None:
 
 def test_health_is_not_treated_as_a_code(client: TestClient) -> None:
     assert client.get("/health").json() == {"status": "ok"}
+
+
+def test_stats_counts_each_redirect(client: TestClient) -> None:
+    code = client.post("/links", json={"url": "https://example.com/page"}).json()[
+        "code"
+    ]
+    assert client.get(f"/links/{code}/stats").json()["clicks"] == 0
+
+    client.get(f"/{code}", follow_redirects=False)
+    client.get(f"/{code}", follow_redirects=False)
+
+    response = client.get(f"/links/{code}/stats")
+    assert response.status_code == 200
+    assert response.json() == {
+        "code": code,
+        "url": "https://example.com/page",
+        "clicks": 2,
+    }
+
+
+def test_stats_returns_404_for_unknown_code(client: TestClient) -> None:
+    response = client.get("/links/missing/stats")
+
+    assert response.status_code == 404

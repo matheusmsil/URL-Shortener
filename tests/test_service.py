@@ -46,13 +46,19 @@ def test_create_link_gives_up_when_every_code_is_taken(
         service.create_link("https://example.com")
 
 
-def test_get_url_returns_url_for_known_code(db: sqlite3.Connection) -> None:
+def test_resolve_returns_url_and_counts_click(db: sqlite3.Connection) -> None:
     service = LinkService(LinkRepository(db))
     link = service.create_link("https://example.com")
 
-    assert service.get_url(link.code) == "https://example.com"
+    assert service.resolve(link.code) == "https://example.com"
+    assert service.get_stats(link.code).clicks == 1
 
 
-def test_get_url_raises_for_unknown_code(db: sqlite3.Connection) -> None:
+def test_resolve_raises_for_unknown_code(db: sqlite3.Connection) -> None:
     with pytest.raises(LinkNotFoundError):
-        LinkService(LinkRepository(db)).get_url("missing")
+        LinkService(LinkRepository(db)).resolve("missing")
+
+
+def test_get_stats_raises_for_unknown_code(db: sqlite3.Connection) -> None:
+    with pytest.raises(LinkNotFoundError):
+        LinkService(LinkRepository(db)).get_stats("missing")
