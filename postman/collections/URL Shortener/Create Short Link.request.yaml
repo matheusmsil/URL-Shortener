@@ -1,0 +1,15 @@
+$kind: http-request
+method: POST
+url: "{{base_url}}/links"
+order: 2000
+description: Create a new shortened link. Returns the short code and original URL.
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: '{"url": "https://linkedin.com/"}'
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.collectionVariables.set("code", pm.response.json().code);

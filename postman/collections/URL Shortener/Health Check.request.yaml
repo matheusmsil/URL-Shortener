@@ -1,0 +1,5 @@
+$kind: http-request
+method: GET
+url: '{{base_url}}/health'
+order: 1000
+description: Check if the service is up and running.

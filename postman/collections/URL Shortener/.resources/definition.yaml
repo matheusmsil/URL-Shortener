@@ -1,0 +1,5 @@
+$kind: collection
+description: A URL shortening service API. Shorten long URLs, redirect via short codes, and track click statistics.
+variables:
+  base_url: http://localhost:8000
+  code: ""

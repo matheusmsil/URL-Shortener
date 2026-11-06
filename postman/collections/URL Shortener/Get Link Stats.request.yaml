@@ -1,0 +1,5 @@
+$kind: http-request
+method: GET
+url: "{{base_url}}/links/{{code}}/stats"
+order: 4000
+description: Get statistics for a short link, including the original URL and total click count.
