@@ -2,6 +2,27 @@
 
 Newest entry first. Each entry covers where the session ended, what I struggled with, commands to revisit, and what to try next.
 
+## 2026-11-06 — Session 3 (done)
+
+- **Status:** Done: #36 create links (PR #39), #37 redirect (PR #40), #38 stats (PR #41), and an extra, #45 Postman collection (PR #46). This completes Session 3. Session 4 issues are ready: #42 release-please, #43 Dockerfile, #44 GHCR image.
+- **Decisions worth remembering for interviews:**
+  - Code uniqueness is enforced by the primary key, not by checking first, which would race under concurrent requests.
+  - Codes come from `secrets` (7 base62 characters). A counter avoids collisions but makes links enumerable.
+  - Redirects use 302, not 301, because browsers cache a 301 and the clicks would never be counted.
+  - Clicks are incremented in one SQL statement (`clicks = clicks + 1`), so concurrent clicks aren't lost. 3 parallel redirects counted 3.
+  - `GET /{code}` matches any single-segment path, so `/health` must be registered before it.
+  - Per-link click counts don't belong in Prometheus: one series per link is high cardinality.
+- **Struggled with:**
+  - The review step was skipped on every PR (#39, #40, #41, #46), although the Session 3 plan asked for a self-review or an AI review before merging.
+  - Commit titles: the service commit was first titled `feat: add POST /links endpoint`. Fixed with `git commit --amend -m` before pushing.
+  - Issue setup: #38 was created without assignee and milestone, and #45 with an empty body.
+  - Staging is a snapshot: a file changed after `git add` showed as `AM` and had to be added again.
+  - Tools: `/docs` can't show a redirect, because `fetch` follows it and CORS blocks the target site. DBeaver kept the deleted `links.db` open and failed with `SQLITE_READONLY_DBMOVED` until reconnected.
+- **Went well:** the PR descriptions from #39 on explained decisions and trade-offs, not just changes. Every commit passed the checks on its own, and #41 was kept as one commit because its rename crossed all layers.
+- **Commands to revisit:** `git commit --amend -m`, `git status --short` (reading `A`, `M` and `AM`), `curl -i`, `sqlite3`.
+- **Ideas:** Prometheus and Grafana after Session 5, with a `/metrics` endpoint and no per-link series. Postman tests with `pm.test`.
+- **Try next:** in Session 4, review each PR before merging, or remove the review step from the plan on purpose instead of skipping it.
+
 ## 2026-11-05 — Session 2 (done)
 
 - **Status:** Done: #21 dependency cache (PR #32) and #22 required checks on `main` (PR #33). This completes Session 2. Both items left open on 2026-11-04 are resolved: squash commits now use the PR title and description, and the title test ran on PR #32.
