@@ -1,0 +1,7 @@
+$kind: http-request
+method: GET
+url: "{{base_url}}/{{code}}"
+settings:
+  followRedirects: false
+order: 3000
+description: Redirect to the original URL using the short code. Also increments the click counter.

@@ -1,0 +1,8 @@
+$kind: collection
+name: URL Shortener
+description: A URL shortening service API. Shorten long URLs, redirect via short codes, and track click statistics.
+variables:
+  - key: base_url
+    value: 'http://localhost:8000'
+  - key: code
+    value: ''
