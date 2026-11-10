@@ -44,6 +44,12 @@ Mark breaking changes with `feat!:` or a `BREAKING CHANGE:` footer.
 
 The branch is deleted automatically after merging.
 
+## Releases
+
+[release-please](https://github.com/googleapis/release-please) keeps a release PR open and updates it on every push to `main`. It picks the next version from the commit titles: `fix:` bumps the patch and `feat:` bumps the minor. Before `1.0.0`, a breaking change also bumps the minor. Merging the release PR updates `CHANGELOG.md` and the version in `pyproject.toml` and `uv.lock`, tags the commit (`v0.1.0`), and creates a GitHub Release.
+
+The workflow uses the `RELEASE_PLEASE_TOKEN` secret, a fine-grained token with read and write access to contents, pull requests and issues on this repository. PRs opened with the default `GITHUB_TOKEN` don't trigger workflows, so the required checks would never run on the release PR. When the token expires, the release PR stops updating: create a new one and replace the secret.
+
 ## How `main` is protected
 
 A ruleset on `main` enforces the following, with no bypass:
